@@ -17,6 +17,7 @@ public class ProductBuilder {
     private BigDecimal discount;
     private Color color;
     private Integer weightInGrams;
+    private Category category;
 
     private ProductBuilder() {
     }
@@ -66,8 +67,13 @@ public class ProductBuilder {
         return this;
     }
 
+    public ProductBuilder withCategory(Category category) {
+        this.category = category;
+        return this;
+    }
+
     public Product build() {
-        return new Product(code, name, description, slug, brand, price, discount, color, weightInGrams);
+        return new Product(code, name, description, slug, brand, price, discount, color, weightInGrams, category);
     }
 
     public static ProductBuilder aProduct(Category category) {
@@ -80,7 +86,8 @@ public class ProductBuilder {
                 .withPrice(new BigDecimal("199.90"))
                 .withDiscount(null)
                 .withColor(Color.WHITE)
-                .withWeightInGrams(147);
+                .withWeightInGrams(147)
+                .withCategory(category);
     }
 
     public static ProductBuilder anotherProduct(Category category) {
@@ -93,7 +100,8 @@ public class ProductBuilder {
                 .withPrice(new BigDecimal("29.90"))
                 .withDiscount(null)
                 .withColor(Color.WHITE)
-                .withWeightInGrams(98);
+                .withWeightInGrams(98)
+                .withCategory(category);
     }
 
     public static ProductBuilder yetAnotherProduct(Category category) {
@@ -106,7 +114,8 @@ public class ProductBuilder {
                 .withPrice(new BigDecimal("79.90"))
                 .withDiscount(null)
                 .withColor(Color.RED)
-                .withWeightInGrams(126);
+                .withWeightInGrams(126)
+                .withCategory(category);
     }
 
 }
