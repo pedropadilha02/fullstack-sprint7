@@ -1,3 +1,7 @@
 # fullstack-sprint7
 
-https://tranquil-eyrie-12889.herokuapp.com/
+```shell
+git push heroku an-answer:main
+```
+
+https://tranquil-eyrie-12889.herokuapp.com/products
