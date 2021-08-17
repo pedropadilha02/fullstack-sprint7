@@ -229,6 +229,25 @@
 			"response": []
 		},
 		{
+			"name": "PUT /payments/{id} - bad request",
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"url": {
+					"raw": "localhost:8080/payments/4",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"payments",
+						"4"
+					]
+				}
+			},
+			"response": []
+		},
+		{
 			"name": "DELETE /payments/{id}",
 			"request": {
 				"method": "DELETE",
@@ -261,6 +280,25 @@
 					"path": [
 						"payments",
 						"99999999999999"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "DELETE /payments/{id} - bad request",
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "localhost:8080/payments/3",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"payments",
+						"3"
 					]
 				}
 			},

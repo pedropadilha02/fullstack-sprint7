@@ -2,6 +2,7 @@ package br.com.rchlo.store.domain;
 
 import javax.persistence.*;
 import java.math.BigDecimal;
+import java.util.List;
 
 @Entity
 @Table(name = "payment")
@@ -46,11 +47,39 @@ public class Payment {
     }
 
     public void confirm() {
+        checkIfCanBeConfirmed();
         this.status = PaymentStatus.CONFIRMED;
     }
 
     public void cancel() {
+        checkIfCanBeCanceled();
         this.status = PaymentStatus.CANCELED;
+    }
+
+    private void checkIfCanBeConfirmed() {
+        if (!canConfirm()) {
+            throw new IllegalStatusException("Can not confirm a payment that is already canceled.");
+        }
+    }
+
+    private void checkIfCanBeCanceled() {
+        if (!canCancel()) {
+            throw new IllegalStatusException("Can not cancel a payment that is already confirmed.");
+        }
+    }
+
+    private boolean canConfirm() {
+        return List.of(PaymentStatus.CREATED, PaymentStatus.CONFIRMED).contains(this.status);
+    }
+
+    private boolean canCancel() {
+        return List.of(PaymentStatus.CREATED, PaymentStatus.CANCELED).contains(this.status);
+    }
+
+    public static class IllegalStatusException extends IllegalStateException {
+        public IllegalStatusException(String message) {
+            super(message);
+        }
     }
 
 }
