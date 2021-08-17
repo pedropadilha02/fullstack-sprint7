@@ -54,7 +54,7 @@ class ProductRepositoryTest {
 
     @Test
     void shouldListAllProductsOrderedByName() {
-        List<Product> products = productRepository.findAllByOrderByName();
+        List<Product> products = productRepository.findAllWithCategoryAndImages();
 
         assertEquals(3, products.size());
 

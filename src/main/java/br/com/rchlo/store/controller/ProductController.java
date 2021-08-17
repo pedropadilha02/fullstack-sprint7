@@ -23,7 +23,7 @@ public class ProductController {
     @Cacheable("product-list")
     @GetMapping("/products")
     public List<ProductDto> products() {
-        return productRepository.findAllByOrderByName().stream().map(ProductDto::new).collect(Collectors.toList());
+        return productRepository.findAllWithCategoryAndImages().stream().map(ProductDto::new).collect(Collectors.toList());
     }
 
     @GetMapping("/reports/products/by-color")
