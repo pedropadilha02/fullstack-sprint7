@@ -1,7 +1,10 @@
 package br.com.rchlo.store.repository;
 
+import br.com.rchlo.store.domain.Category;
 import br.com.rchlo.store.domain.Color;
 import br.com.rchlo.store.domain.Product;
+import br.com.rchlo.store.dto.ProductByColorDto;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
@@ -10,9 +13,11 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.jdbc.Sql;
 
-import java.math.BigDecimal;
+import java.util.Comparator;
 import java.util.List;
 
+import static br.com.rchlo.store.builder.CategoryBuilder.aCategory;
+import static br.com.rchlo.store.builder.ProductBuilder.*;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @DataJpaTest
@@ -27,37 +32,59 @@ class ProductRepositoryTest {
     @Autowired
     private ProductRepository productRepository;
 
+    @BeforeEach
+    public void loadData() {
+        Category category = entityManager.persist(aCategory().build());
+        entityManager.persist(aProduct(category)
+                .withCode(7L)
+                .withName("Jaqueta Puffer Juvenil Com Capuz Super Mario Branco")
+                .withColor(Color.WHITE)
+                .build());
+        entityManager.persist(anotherProduct(category)
+                .withCode(1L)
+                .withName("Regata Infantil Mario Bros Branco")
+                .withColor(Color.WHITE)
+                .build());
+        entityManager.persist(yetAnotherProduct(category)
+                .withCode(2L)
+                .withName("Blusa de Moletom Infantil Mario Bros Vermelho")
+                .withColor(Color.RED)
+                .build());
+    }
+
     @Test
     void shouldListAllProductsOrderedByName() {
-        entityManager.persist(new Product(7L,
-                "Jaqueta Puffer Juvenil Com Capuz Super Mario Branco",
-                "A Jaqueta Puffer Juvenil Com Capuz Super Mario Branco é confeccionada em material sintético.",
-                "jaqueta-puffer-juvenil-com-capuz-super-mario-branco-13834193_sku",
-                "Nintendo",
-                new BigDecimal("199.90"),
-                null,
-                Color.WHITE,
-                147));
-        entityManager.persist(new Product(1L,
-                "Regata Infantil Mario Bros Branco",
-                "A Regata Infantil Mario Bros Branco é confeccionada em fibra natural. Aposte!",
-                "regata-infantil-mario-bros-branco-14040174_sku",
-                "Nintendo",
-                new BigDecimal("29.90"),
-                null,
-                Color.WHITE,
-                98));
-
         List<Product> products = productRepository.findAllByOrderByName();
 
-        assertEquals(2, products.size());
+        assertEquals(3, products.size());
 
-        Product firstProduct = products.get(0);
-        assertEquals(7L, firstProduct.getCode());
-        assertEquals("Jaqueta Puffer Juvenil Com Capuz Super Mario Branco", firstProduct.getName());
+        Product aProduct = products.get(0);
+        assertEquals(2L, aProduct.getCode());
+        assertEquals("Blusa de Moletom Infantil Mario Bros Vermelho", aProduct.getName());
 
-        Product secondProduct = products.get(1);
-        assertEquals(1L, secondProduct.getCode());
-        assertEquals("Regata Infantil Mario Bros Branco", secondProduct.getName());
+        Product anotherProduct = products.get(1);
+        assertEquals(7L, anotherProduct.getCode());
+        assertEquals("Jaqueta Puffer Juvenil Com Capuz Super Mario Branco", anotherProduct.getName());
+
+        Product yetAnotherProduct = products.get(2);
+        assertEquals(1L, yetAnotherProduct.getCode());
+        assertEquals("Regata Infantil Mario Bros Branco", yetAnotherProduct.getName());
     }
+
+    @Test
+    void shouldRetrieveProductsByColor() {
+        List<ProductByColorDto> productsByColor = productRepository.productsByColor();
+        productsByColor.sort(Comparator.comparing(ProductByColorDto::getColor));
+
+        assertEquals(2, productsByColor.size());
+
+        ProductByColorDto aProductDto = productsByColor.get(0);
+        assertEquals("Branca", aProductDto.getColor());
+        assertEquals(2, aProductDto.getAmount());
+
+        ProductByColorDto anotherProductDto = productsByColor.get(1);
+        assertEquals("Vermelha", anotherProductDto.getColor());
+        assertEquals(1, anotherProductDto.getAmount());
+    }
+
 }
