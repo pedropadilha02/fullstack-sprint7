@@ -10,6 +10,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.jdbc.Sql;
 
@@ -54,7 +56,8 @@ class ProductRepositoryTest {
 
     @Test
     void shouldListAllProductsOrderedByName() {
-        List<Product> products = productRepository.findAllWithCategoryAndImages();
+        PageRequest pageRequest = PageRequest.of(0, 10, Sort.by("name"));
+        List<Product> products = productRepository.findAllWithCategoryAndImages(pageRequest);
 
         assertEquals(3, products.size());
 

@@ -62,6 +62,39 @@
 				}
 			},
 			"response": []
+		},
+		{
+			"name": "GET /products - 1 por página, 3ª página, ordenados por preço",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/products?size=1&page=3&sort=price,desc",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"products"
+					],
+					"query": [
+						{
+							"key": "size",
+							"value": "1"
+						},
+						{
+							"key": "page",
+							"value": "3"
+						},
+						{
+							"key": "sort",
+							"value": "price,desc"
+						}
+					]
+				}
+			},
+			"response": []
 		}
 	]
 }
