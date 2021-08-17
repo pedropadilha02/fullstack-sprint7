@@ -57,7 +57,7 @@ class ProductRepositoryTest {
     @Test
     void shouldListAllProductsOrderedByName() {
         PageRequest pageRequest = PageRequest.of(0, 10, Sort.by("name"));
-        List<Product> products = productRepository.findAllWithCategoryAndImages(pageRequest);
+        List<Product> products = productRepository.findAllWithCategoryAndImagesAndAvailableSizes(pageRequest);
 
         assertEquals(3, products.size());
 

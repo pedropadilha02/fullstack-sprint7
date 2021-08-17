@@ -34,6 +34,11 @@ public class Product {
     @ManyToOne
     private Category category;
 
+    @ElementCollection
+    @Enumerated(EnumType.STRING)
+    /* porque Set? @see https://vladmihalcea.com/hibernate-multiplebagfetchexception/ */
+    private Set<Size> availableSizes = new HashSet<>();
+
     /** @deprecated */
     protected Product() {
     }
@@ -93,6 +98,10 @@ public class Product {
 
     public Category getCategory() {
         return category;
+    }
+
+    public Set<Size> getAvailableSizes() {
+        return availableSizes;
     }
 
 }

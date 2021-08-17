@@ -2,6 +2,7 @@ package br.com.rchlo.store.dto;
 
 import br.com.rchlo.store.domain.Product;
 import br.com.rchlo.store.domain.ProductImage;
+import br.com.rchlo.store.domain.Size;
 
 import java.math.BigDecimal;
 import java.util.List;
@@ -33,6 +34,8 @@ public class ProductDto {
 
     private final CategoryDto category;
 
+    private final List<String> availableSizes;
+
     public ProductDto(Product product) {
         this.code = product.getCode();
         this.name = product.getName();
@@ -46,6 +49,7 @@ public class ProductDto {
         this.weightInGrams = product.getWeightInGrams();
         this.images = product.getImages().stream().map(ProductImage::getImageUrl).collect(Collectors.toList());
         this.category = new CategoryDto(product.getCategory());
+        this.availableSizes = product.getAvailableSizes().stream().map(Size::getDescription).collect(Collectors.toList());
     }
 
     public Long getCode() {
@@ -94,6 +98,10 @@ public class ProductDto {
 
     public CategoryDto getCategory() {
         return category;
+    }
+
+    public List<String> getAvailableSizes() {
+        return availableSizes;
     }
 
 }

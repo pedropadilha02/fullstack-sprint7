@@ -25,7 +25,7 @@ public class ProductController {
     @Cacheable("product-list")
     @GetMapping("/products")
     public List<ProductDto> products(@PageableDefault(sort = "name") Pageable pageable) {
-        return productRepository.findAllWithCategoryAndImages(pageable).stream().map(ProductDto::new).collect(Collectors.toList());
+        return productRepository.findAllWithCategoryAndImagesAndAvailableSizes(pageable).stream().map(ProductDto::new).collect(Collectors.toList());
     }
 
     @GetMapping("/reports/products/by-color")
