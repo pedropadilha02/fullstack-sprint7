@@ -2,8 +2,8 @@ package br.com.rchlo.store.domain;
 
 import javax.persistence.*;
 import java.math.BigDecimal;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 public class Product {
@@ -29,15 +29,14 @@ public class Product {
     private Integer weightInGrams;
 
     @OneToMany(mappedBy = "product")
-    private Set<ProductImage> images = new HashSet<>();
+    private List<ProductImage> images = new ArrayList<>();
 
     @ManyToOne
     private Category category;
 
     @ElementCollection
     @Enumerated(EnumType.STRING)
-    /* porque Set? @see https://vladmihalcea.com/hibernate-multiplebagfetchexception/ */
-    private Set<Size> availableSizes = new HashSet<>();
+    private List<Size> availableSizes = new ArrayList<>();
 
     /** @deprecated */
     protected Product() {
@@ -92,7 +91,7 @@ public class Product {
         return weightInGrams;
     }
 
-    public Set<ProductImage> getImages() {
+    public List<ProductImage> getImages() {
         return images;
     }
 
@@ -100,7 +99,7 @@ public class Product {
         return category;
     }
 
-    public Set<Size> getAvailableSizes() {
+    public List<Size> getAvailableSizes() {
         return availableSizes;
     }
 
