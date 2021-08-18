@@ -11,17 +11,17 @@ import java.util.List;
 
 public interface ProductRepository extends JpaRepository<Product, Long> {
 
-    @Query("select distinct p from Product p join fetch p.category left join fetch p.images order by p.name")
+    @Query("select distinct p from Product p join fetch p.category left join fetch p.images")
     List<Product> findAllWithCategoryAndImages(Pageable pageable);
 
-    @Query("select distinct p from Product p left join fetch p.availableSizes where p in :products order by p.name")
-    List<Product> findAllAvailableSizesOfGivenProducts(@Param("products") List<Product> products);
+    @Query("select distinct p from Product p left join fetch p.availableSizes where p in :products")
+    List<Product> findAllAvailableSizesOfGivenProducts(Pageable pageable, @Param("products") List<Product> products);
 
     /** porque este método default?
         @see https://vladmihalcea.com/hibernate-multiplebagfetchexception/ */
     default List<Product> findAllWithCategoryAndImagesAndAvailableSizes(Pageable pageable) {
         List<Product> products = findAllWithCategoryAndImages(pageable);
-        return findAllAvailableSizesOfGivenProducts(products);
+        return findAllAvailableSizesOfGivenProducts(pageable, products);
     }
 
     @Query("select new br.com.rchlo.store.dto.ProductByColorDto(p.color, count(p)) from Product p group by p.color")
