@@ -1,10 +1,8 @@
 package br.com.rchlo.store.domain;
 
-import javax.persistence.Entity;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
-import javax.persistence.Id;
+import javax.persistence.*;
 import java.math.BigDecimal;
+import java.util.List;
 
 @Entity
 public class Product {
@@ -28,6 +26,12 @@ public class Product {
     private Color color;
 
     private Integer weightInGrams;
+
+    @OneToMany(mappedBy = "product")
+    private List<ProductImage> image;
+
+    @ManyToOne
+    private Category category;
 
 //    private List<Size> availableSizes;
 
@@ -82,4 +86,8 @@ public class Product {
     public Integer getWeightInGrams() {
         return weightInGrams;
     }
+
+    public List<ProductImage> getImage() { return image; }
+
+    public Category getCategory() { return category; }
 }

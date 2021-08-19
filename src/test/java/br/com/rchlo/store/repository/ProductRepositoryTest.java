@@ -2,6 +2,10 @@ package br.com.rchlo.store.repository;
 
 import br.com.rchlo.store.domain.Color;
 import br.com.rchlo.store.domain.Product;
+import br.com.rchlo.store.domain.ProductImage;
+import br.com.rchlo.store.dto.ProductByColorDto;
+import org.assertj.core.api.Assert;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
@@ -37,7 +41,8 @@ class ProductRepositoryTest {
                 new BigDecimal("199.90"),
                 null,
                 Color.WHITE,
-                147));
+                147
+        ));
         entityManager.persist(new Product(1L,
                 "Regata Infantil Mario Bros Branco",
                 "A Regata Infantil Mario Bros Branco é confeccionada em fibra natural. Aposte!",
@@ -48,7 +53,7 @@ class ProductRepositoryTest {
                 Color.WHITE,
                 98));
 
-        List<Product> products = productRepository.findAll();
+        List<Product> products = productRepository.findAllByOrderByName();
 
         assertEquals(2, products.size());
 
@@ -60,4 +65,37 @@ class ProductRepositoryTest {
         assertEquals(1L, secondProduct.getCode());
         assertEquals("Regata Infantil Mario Bros Branco", secondProduct.getName());
     }
+
+    @Test
+    void shouldListTheWhiteProduct() {
+        entityManager.persist(new Product(7L,
+                "Jaqueta Puffer Juvenil Com Capuz Super Mario Branco",
+                "A Jaqueta Puffer Juvenil Com Capuz Super Mario Branco é confeccionada em material sintético.",
+                "jaqueta-puffer-juvenil-com-capuz-super-mario-branco-13834193_sku",
+                "Nintendo",
+                new BigDecimal("199.90"),
+                null,
+                Color.WHITE,
+                147));
+        entityManager.persist(new Product(1L,
+                "Regata Infantil Mario Bros Branco",
+                "A Regata Infantil Mario Bros Branco é confeccionada em fibra natural. Aposte!",
+                "regata-infantil-mario-bros-branco-14040174_sku",
+                "Nintendo",
+                new BigDecimal("29.90"),
+                null,
+                Color.RED,
+                98));
+
+        List<ProductByColorDto> products = productRepository.productsByColor();
+
+        assertEquals(2, products.size());
+
+        ProductByColorDto firstProduct = products.get(0);
+        assertEquals("Vermelha", firstProduct.getColor());
+
+        ProductByColorDto secondProduct = products.get(1);
+        assertEquals("Branca", secondProduct.getColor());
+    }
+
 }
